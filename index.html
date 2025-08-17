@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRM Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="logo">🗂️</div>
+        <div class="brand-text">
+          <h1>MyCRM</h1>
+          <span>Dashboard</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">×</button>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item active" href="#"><span>🏠</span> Dashboard</a>
+        <a class="nav-item" href="#"><span>👤</span> Contacts</a>
+        <a class="nav-item" href="#"><span>💼</span> Deals</a>
+        <a class="nav-item" href="#"><span>✅</span> Tasks</a>
+        <a class="nav-item" href="#"><span>📈</span> Reports</a>
+        <a class="nav-item" href="#"><span>⚙️</span> Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="toggleTheme" class="btn secondary">🌗 Theme</button>
+        <p class="small">v1.0</p>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="icon-button" id="sidebarOpen" aria-label="Open sidebar">☰</button>
+        <div class="search">
+          <input type="text" id="globalSearch" placeholder="Search contacts, deals, tasks..." />
+        </div>
+        <div class="top-actions">
+          <button class="btn primary" id="addContactBtn">+ Add Contact</button>
+          <div class="user">
+            <div class="avatar">AK</div>
+            <span class="username">Akash</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- KPI Cards -->
+      <section class="grid kpis">
+        <div class="card kpi">
+          <div class="kpi-head">Total Leads</div>
+          <div class="kpi-value" id="kpiLeads">—</div>
+          <div class="kpi-sub">↑ vs last week</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-head">Active Deals</div>
+          <div class="kpi-value" id="kpiDeals">—</div>
+          <div class="kpi-sub">in pipeline</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-head">Revenue (MTD)</div>
+          <div class="kpi-value" id="kpiRevenue">—</div>
+          <div class="kpi-sub">this month</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-head">Tasks Due Today</div>
+          <div class="kpi-value" id="kpiTasks">—</div>
+          <div class="kpi-sub">due by 6pm</div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="grid charts">
+        <div class="card">
+          <div class="card-head">
+            <h3>Deals by Stage</h3>
+          </div>
+          <canvas id="stageChart" height="140"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Revenue Trend (Last 12 months)</h3>
+          </div>
+          <canvas id="revenueChart" height="140"></canvas>
+        </div>
+      </section>
+
+      <!-- Contacts table -->
+      <section class="card table-card">
+        <div class="card-head table-head">
+          <h3>Contacts</h3>
+          <div class="table-actions">
+            <input type="text" id="contactSearch" placeholder="Search name, company, email..." />
+            <select id="stageFilter">
+              <option value="">All Stages</option>
+              <option>New</option>
+              <option>Qualified</option>
+              <option>Proposal</option>
+              <option>Won</option>
+              <option>Lost</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table id="contactsTable">
+            <thead>
+              <tr>
+                <th data-sort="name">Name</th>
+                <th data-sort="company">Company</th>
+                <th data-sort="email">Email</th>
+                <th data-sort="stage">Stage</th>
+                <th data-sort="value">Deal Value</th>
+                <th data-sort="owner">Owner</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Add Contact -->
+  <div class="modal" id="contactModal" aria-hidden="true" role="dialog" aria-labelledby="contactModalTitle">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="contactModalTitle">Add Contact</h3>
+        <button class="icon-button" data-close>×</button>
+      </div>
+      <form id="contactForm" class="modal-body">
+        <div class="form-row">
+          <label>Full Name</label>
+          <input type="text" name="name" required />
+        </div>
+        <div class="form-row">
+          <label>Company</label>
+          <input type="text" name="company" required />
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" name="email" required />
+        </div>
+        <div class="form-row">
+          <label>Stage</label>
+          <select name="stage" required>
+            <option>New</option>
+            <option>Qualified</option>
+            <option>Proposal</option>
+            <option>Won</option>
+            <option>Lost</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Deal Value ($)</label>
+          <input type="number" name="value" min="0" step="100" required />
+        </div>
+        <div class="form-row">
+          <label>Owner</label>
+          <input type="text" name="owner" value="Akash" required />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" data-close>Cancel</button>
+          <button type="submit" class="btn primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

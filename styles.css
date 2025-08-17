@@ -1,0 +1,146 @@
+/* ---------- Base ---------- */
+:root{
+  --bg:#0f172a;           /* slate-900 */
+  --panel:#111827;        /* gray-900 */
+  --muted:#1f2937;        /* gray-800 */
+  --text:#e5e7eb;         /* gray-200 */
+  --subtle:#9ca3af;       /* gray-400 */
+  --primary:#22c55e;      /* green-500 */
+  --primary-weak:#16a34a; /* green-600 */
+  --border:#374151;       /* gray-700 */
+  --accent:#38bdf8;       /* sky-400 */
+  --card:#0b1220;         /* darker card */
+  --danger:#ef4444;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(120deg,#0b1220 0%, #0f172a 70%);
+  color:var(--text);
+}
+
+/* ---------- Layout ---------- */
+.app{display:grid; grid-template-columns:260px 1fr; height:100vh;}
+.sidebar{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; padding:16px; gap:12px;
+  position:relative;
+}
+.brand{display:flex; align-items:center; gap:12px; margin-bottom:8px;}
+.brand .logo{font-size:24px}
+.brand-text h1{font-size:18px; margin:0}
+.brand-text span{font-size:12px; color:var(--subtle)}
+.sidebar-close{display:none; position:absolute; right:6px; top:6px; background:transparent; border:0; color:var(--subtle); font-size:22px; cursor:pointer}
+
+.nav{display:flex; flex-direction:column; gap:6px}
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:12px;
+  color:var(--text); text-decoration:none;
+  transition:background .2s, color .2s;
+}
+.nav-item:hover{background:rgba(56,189,248,.08)}
+.nav-item.active{background:rgba(34,197,94,.18); color:#dcfce7}
+
+.sidebar-footer{margin-top:auto; display:flex; flex-direction:column; gap:10px}
+.small{color:var(--subtle); font-size:12px; margin:0}
+
+.main{display:flex; flex-direction:column; min-width:0}
+.topbar{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 16px; border-bottom:1px solid var(--border);
+  background:rgba(2,6,23,.6); position:sticky; top:0; backdrop-filter: blur(8px);
+}
+.icon-button{
+  background:var(--muted); color:var(--text); border:0; border-radius:10px;
+  padding:8px 12px; cursor:pointer;
+}
+.search{flex:1}
+.search input{
+  width:100%; background:var(--muted); color:var(--text); border:1px solid var(--border);
+  border-radius:12px; padding:10px 12px;
+}
+.top-actions{display:flex; align-items:center; gap:10px}
+.avatar{
+  width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--primary));
+  display:grid; place-items:center; font-size:12px; font-weight:700; color:#0b1220;
+}
+.username{font-size:14px; color:var(--subtle)}
+
+.grid{display:grid; gap:16px; padding:16px}
+.kpis{grid-template-columns:repeat(4, minmax(0,1fr))}
+.charts{grid-template-columns:repeat(2, minmax(0,1fr))}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+.card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.card-head h3{margin:0; font-size:16px}
+
+.kpi .kpi-head{color:var(--subtle); font-size:12px; margin-bottom:6px}
+.kpi .kpi-value{font-size:28px; font-weight:700; letter-spacing:.2px}
+.kpi .kpi-sub{color:var(--subtle); font-size:12px}
+
+.table-card{padding:0; overflow:hidden}
+.table-head{padding:16px; border-bottom:1px solid var(--border)}
+.table-actions{display:flex; gap:10px}
+.table-actions input,.table-actions select{
+  background:var(--muted); color:var(--text); border:1px solid var(--border);
+  border-radius:10px; padding:8px 10px;
+}
+.table-wrapper{max-height:420px; overflow:auto}
+table{width:100%; border-collapse:collapse; font-size:14px}
+thead th{
+  position:sticky; top:0; background:var(--panel); color:var(--subtle); text-align:left;
+  padding:12px; border-bottom:1px solid var(--border); cursor:pointer;
+}
+tbody td{padding:12px; border-bottom:1px solid var(--border)}
+tbody tr:hover{background:rgba(56,189,248,.06)}
+
+.badge{
+  display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600;
+  border:1px solid var(--border)
+}
+.badge.New{background:rgba(56,189,248,.12); color:#bae6fd}
+.badge.Qualified{background:rgba(34,197,94,.14); color:#bbf7d0}
+.badge.Proposal{background:rgba(251,191,36,.14); color:#fde68a}
+.badge.Won{background:rgba(34,197,94,.22); color:#dcfce7; border-color:#14532d}
+.badge.Lost{background:rgba(239,68,68,.14); color:#fecaca}
+
+.btn{padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--muted); color:var(--text); cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent)); color:#0b1220; font-weight:700; border:0}
+.btn.secondary{background:var(--muted)}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center}
+.modal[aria-hidden="false"]{display:flex}
+.modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55)}
+.modal-content{
+  position:relative; width:min(560px, 92vw); background:var(--panel); border:1px solid var(--border); border-radius:16px; overflow:hidden
+}
+.modal-header{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border)}
+.modal-body{padding:16px}
+.form-row{display:flex; flex-direction:column; gap:6px; margin-bottom:12px}
+.form-row input,.form-row select{
+  background:var(--muted); border:1px solid var(--border); color:var(--text); border-radius:10px; padding:10px
+}
+.modal-footer{display:flex; justify-content:flex-end; gap:8px; padding-top:6px}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px){
+  .kpis{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .charts{grid-template-columns:1fr}
+}
+@media (max-width: 780px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed; inset:0 auto 0 0; width:260px; transform:translateX(-100%); transition: transform .2s ease}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-close{display:block}
+}
